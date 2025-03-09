@@ -1,6 +1,6 @@
 #Imagen que se usará para la construcción de la imagen de la aplicación front-end
 #Se usa la versión 20.17 de node en alpine3.20
-FROM node:20.17-alpine3.20 AS builder
+FROM node:20.17-alpine AS builder
 WORKDIR /app
 
 #Copy [Origen] [Destino]
