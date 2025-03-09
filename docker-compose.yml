@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  backend:
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - compilador-network
+    depends_on:
+      - mysql
+
+  front-end:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    image: front-end
+    container_name: front-end
+    ports:
+      - "80:80"
+    networks:
+      - compilador-network
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: compiladorDB
+    ports:
+      - "3307:3306"
+    networks:
+      - compilador-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+networks:
+  compilador-network:
+
+volumes:
+  mysql-data:
