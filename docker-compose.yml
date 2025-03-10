@@ -6,9 +6,15 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        BACKEND_PORT: ${BACKEND_PORT}
     container_name: backend
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:${MYSQL_CONTAINER_PORT}/${MYSQL_DATABASE}
+      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
+      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
     networks:
       - compilador-network
     depends_on:
@@ -18,10 +24,12 @@ services:
     build:
       context: ./front-end
       dockerfile: Dockerfile
+      args:
+        FRONTEND_PORT: ${FRONTEND_PORT}
     image: front-end
     container_name: front-end
     ports:
-      - "80:80"
+      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     networks:
       - compilador-network
     depends_on:
@@ -31,10 +39,12 @@ services:
     image: mysql
     container_name: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: compiladorDB
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
-      - "3307:3306"
+      - "${MYSQL_LOCAL_PORT}:${MYSQL_CONTAINER_PORT}"
     networks:
       - compilador-network
     volumes:
