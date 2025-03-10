@@ -1,0 +1,311 @@
+.sidebar {
+    height: 100vh;
+    width: 100vw;
+    background-color: #D9D9D9;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sidebar-logo img {
+    width: 100px;
+    height: auto;
+}
+
+.sidebar-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000000;
+    font-family: "Roboto-Bold", Helvetica;
+}
+
+.new-project-btn {
+    background-color: #d68115;
+    font-family: "Roboto-Bold", Helvetica;
+    color: #000000;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 15rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.new-project-btn:hover {
+    background-color: #fba533;
+    transform: scale(1.05);
+}
+.textoNuevoProyecto{
+    font-size: 1rem;
+    font-weight: 600;
+    color: #000000;
+    font-family: "Roboto-Bold", Helvetica;
+}
+.textFieldProyecto{
+    width: 100%;
+    height: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #000000;
+    border-radius: 0.5rem;
+    font-family: "Roboto-Regular", Helvetica;
+    font-size: 1rem;
+    color: #000000;
+    background-color: white;
+}
+.nuevoConfirmacion{
+    background-color: #d68115;
+    font-family: "Roboto-Bold", Helvetica;
+    color: #000000;
+    font-weight: 700;
+    padding: 0.5rem 1rem;
+    border-radius: 15rem;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.nuevoConfirmacion:hover {
+    background-color: #fba533;
+    transform: scale(1.05);
+}
+.modal{
+    background-color: #D9D9D9;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.modal-buttons{
+    display: flex;
+    column-gap: 1rem;
+}
+.tituloProyectos{
+    color: #d68115;
+    font-family: "Roboto-SemiBold", Helvetica;
+    font-size: 36px;
+    font-weight: 600;
+    left: 0;
+    letter-spacing: 0;
+    line-height: normal;
+}
+.right-menu {
+    background-color: #fafafa;
+    margin-left: 2rem;
+    margin-top:2rem;
+}
+
+.right-menu h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.project {
+    margin-bottom: 20px;
+}
+
+.project h3 {
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.folder {
+    font-size: 1rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.project-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.project-title img {
+    width: 24px;
+    height: 24px;
+}
+
+.project-container {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.project-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.project-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.tituloProyecto{
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 100px;
+    height: 32px;
+}
+
+.project-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.project-actions img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    opacity: 1;
+}
+
+.project-actions img:hover {
+    opacity: 1;
+}
+.folder-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 100px;
+    height: 32px;
+}
+
+.folder-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.folder-actions img {
+    display: block;
+    width: 24px;
+    height: 24px;
+    opacity: 1;
+}
+
+.folder-actions img:hover {
+    opacity: 1;
+}
+
+.btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-icon img {
+    width: 24px;
+    height: 24px;
+    opacity: 1;
+}
+
+.btn-icon:hover img {
+    opacity: 1;
+}
+.folder-container {
+    margin-left: 20px;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+    color: #000000;
+    font-family: "Roboto-SemiBold", Helvetica;
+    font-size: 16px;
+    font-weight: 700;
+
+}
+
+.folder-container {
+    margin-left: 20px;
+    padding: 5px;
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+.folder-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.file-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 calc(46%);
+    max-width: calc(46%);
+    background: #f8f8f8;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.file-card:hover {
+    transform: scale(1.05);
+    background: #e0e0e0;
+}
+
+/* Icono dentro de la tarjeta */
+.file-icon {
+    width: 26px;
+    height: 26px;
+    margin-bottom: 5px;
+}
+
+/* Nombre del archivo */
+.file-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000000;
+}
+.folder-info{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
