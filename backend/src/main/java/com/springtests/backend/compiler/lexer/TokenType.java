@@ -15,9 +15,9 @@ public enum TokenType {
     OPERATOR_ASSIGNMENT,
     OPERATOR_RELATIONAL,
     OPERATOR_LOGICAL,
-    INTEGER,
-    DOUBLE,
-    STRING,
+    ENTERO,
+    REAL,
+    CADENA,
     IDENTIFIER,
     COMMENT_SINGLE,
     COMMENT_MULTI;
@@ -38,9 +38,9 @@ public enum TokenType {
                 OPERATOR_RELATIONAL,
                 OPERATOR_ASSIGNMENT,
                 OPERATOR_LOGICAL,
-                INTEGER,
-                DOUBLE,
-                STRING,
+                ENTERO,
+                REAL,
+                CADENA,
                 IDENTIFIER
                 //ERROR
         );

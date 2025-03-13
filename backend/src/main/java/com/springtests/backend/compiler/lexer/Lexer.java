@@ -20,6 +20,9 @@ public class Lexer {
         int col = 1;
         int length = sourceCode.length();
 
+        //Todo a minúscuulas
+        sourceCode = sourceCode.toLowerCase(Locale.ROOT);
+
         while (pos < length) {
             char current = sourceCode.charAt(pos);
 
@@ -95,7 +98,7 @@ public class Lexer {
                 Pattern pattern = RegexPatterns.getPattern(type);
                 Matcher matcher = pattern.matcher(sourceCode.substring(pos));
                 if (matcher.find() && matcher.start() == 0) {
-                    String lexeme = matcher.group();
+                    String lexeme = matcher.group(); //Pendiente
                     tokens.add(new Token(type, lexeme, line, col));
                     if (type == TokenType.IDENTIFIER) { // Si tpo es igual a un ID se coloca en la tabla de símbolos
                         symbolTable.addSymbol(lexeme, type);

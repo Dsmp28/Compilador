@@ -12,7 +12,7 @@ public class RegexPatterns {
         patterns.put(TokenType.WHITESPACE, Pattern.compile("^\\s+"));
 
         // Palabras clave y tipos de datos
-        patterns.put(TokenType.DATA_TYPE, Pattern.compile("^(int|double|boolean|char|string)"));
+        patterns.put(TokenType.DATA_TYPE, Pattern.compile("^(entero|real|booleano|caracter|cadena)"));
         patterns.put(TokenType.KEYWORD_CONTROL, Pattern.compile("^(if|else|switch)"));
         patterns.put(TokenType.KEYWORD_ITERATION, Pattern.compile("^(for|while|do)"));
         patterns.put(TokenType.KEYWORD, Pattern.compile("^(escribirlínea|longitud|acadena)"));
@@ -21,9 +21,9 @@ public class RegexPatterns {
         patterns.put(TokenType.IDENTIFIER, Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*"));
 
         // Literales
-        patterns.put(TokenType.INTEGER, Pattern.compile("^-?\\d+"));
-        patterns.put(TokenType.DOUBLE, Pattern.compile("^-?\\d+\\.\\d+"));
-        patterns.put(TokenType.STRING, Pattern.compile("^\"[^\"]*\""));
+        patterns.put(TokenType.ENTERO, Pattern.compile("^-?\\d+"));
+        patterns.put(TokenType.REAL, Pattern.compile("^-?\\d+\\.\\d+"));
+        patterns.put(TokenType.CADENA, Pattern.compile("^\"[^\"]*\""));
 
         // Operadores
         patterns.put(TokenType.OPERATOR_ARITHMETIC, Pattern.compile("^(\\+{1,2}|-{1,2}|\\*|/|\\^|#)"));
