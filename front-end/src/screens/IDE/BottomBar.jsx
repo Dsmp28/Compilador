@@ -11,8 +11,7 @@ const StyledBottomBar = styled.div`
     background: white;
     border-top: 2px solid #ddd;
 `;
-
-const BottomBar = ({ onExport, onExecute }) => {
+const BottomBar = ({onExport, onExecute}) => {
     return (
         <StyledBottomBar>
             <div className={"btnExportar"}>

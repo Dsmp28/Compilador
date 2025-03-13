@@ -3,17 +3,19 @@ import styled from "styled-components";
 import codigoImagen from "../../assets/codigo.png";
 
 const StyledHeader = styled.div`
-  width: 100%;
-  height: 60px;
-  background-color: #D9D9D9;
+    width: 100%;
+    height: 60px;
+    background-color: #D9D9D9;
+    display: flex;
     justify-content: center;
-  display: flex;
-  align-items: center;
-  color: black;
-  font-size: 1.6rem;
-  font-weight: bold;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-`
+    align-items: center;
+    color: black;
+    font-size: 1.6rem;
+    font-weight: bold;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    position:relative;
+`;
+
 
 const Header = () => {
     return (

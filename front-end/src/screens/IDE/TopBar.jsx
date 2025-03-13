@@ -12,23 +12,11 @@ const StyledTopBar = styled.div`
     height:46px;
 `;
 
-const Select = styled.select`
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-    background:white;
-    color: black;
-    border-color: #ddd;
-`;
 
-const TopBar = ({ onSave, onThemeChange }) => {
+const TopBar = ({onSave}) => {
     return (
         <StyledTopBar>
             <Button text="Guardar" onClick={onSave} className="btnBar" />
-            <Select onChange={(e) => onThemeChange(e.target.value)}>
-                <option value="dark">Oscuro</option>
-                <option value="light">Claro</option>
-            </Select>
         </StyledTopBar>
     );
 };

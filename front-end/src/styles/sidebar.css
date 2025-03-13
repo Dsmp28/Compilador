@@ -316,6 +316,8 @@
     align-items: center;
     height: 48px;
     background-color: #B8B8B8;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+    position:relative;
 }
 .textoSalida{
     font-size: 1.25rem;
