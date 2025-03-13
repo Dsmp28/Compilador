@@ -1,9 +1,9 @@
 import documento from "../assets/measurement.png";
 const File = ({ file, onClick}) => {
     return (
-        <div className="file-card" onClick={onClick}>
+        <div className="file-card" onClick={() => onClick(file)}>
             <img src={documento} className="file-icon" />
-            <span className="file-name">{file.name}</span>
+            {/*<span className="file-name">{file.name}</span>*/}
         </div>
     );
 };
