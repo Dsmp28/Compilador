@@ -13,8 +13,8 @@ public class Test {
                     contador = 1;
                 }
                 """;
-        Lexer lexer = new Lexer();
-        lexer.analyze(code);
+        Lexer lexer = new Lexer(); /*Buenas
+        Tardes */ lexer.analyze(code);
         lexer.generateOutput();
     }
 }
