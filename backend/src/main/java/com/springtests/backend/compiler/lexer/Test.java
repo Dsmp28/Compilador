@@ -5,14 +5,16 @@ import java.util.Locale;
 public class Test {
     public static void main(String[] args) {
         String code = """
-            entero contador;
-            Contador = 1;
-            if (contador == 1) { return = 1; } else { return = 0; }
-            """;
-
+                // Este es un comentario de una línea
+                int contador = 0;  // Inicialización del contador
+                /* Este es un comentario
+                   multilínea */
+                if (contador == 0) {
+                    contador = 1;
+                }
+                """;
         Lexer lexer = new Lexer();
         lexer.analyze(code);
         lexer.generateOutput();
-
     }
 }

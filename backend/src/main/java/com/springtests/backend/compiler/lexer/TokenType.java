@@ -1,38 +1,49 @@
 package com.springtests.backend.compiler.lexer;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum TokenType {
-    // Identificadores y palabras clave
-    IDENTIFIER,            // Variables, funciones, etc.
-    KEYWORD,               // Palabras reservadas del lenguaje
-
-    // Tipos de datos
-    DATA_TYPE,             // int, double, boolean, char, string
-
-    // Literales
+    WHITESPACE,
+    DATA_TYPE,
+    KEYWORD_CONTROL,
+    KEYWORD_ITERATION,
+    KEYWORD,
+    SEPARATOR,
+    GROUPING,
+    OPERATOR_ARITHMETIC,
+    OPERATOR_ASSIGNMENT,
+    OPERATOR_RELATIONAL,
+    OPERATOR_LOGICAL,
     INTEGER,
-    DOUBLE,// Números enteros y decimales
-    STRING,                // Cadenas de texto
+    DOUBLE,
+    STRING,
+    IDENTIFIER,
+    COMMENT_SINGLE,
+    COMMENT_MULTI;
+    //ERROR;
 
-    // Operadores
-    OPERATOR_ARITHMETIC,   // +, -, *, /, ^, #, ++, --
-    OPERATOR_RELATIONAL,   // ==, !=, >, <, >=, <=
-    OPERATOR_LOGICAL,      // &&, ||, !
-
-    // Signos especiales
-    SEPARATOR,             // Coma, punto y coma (;)
-    GROUPING,              // Paréntesis (), llaves {}, corchetes []
-
-    // Sentencias de control
-    KEYWORD_CONTROL,       // if, else, switch
-
-    // Sentencias de iteración
-    KEYWORD_ITERATION,     // for, while, do-while
-
-    // Comentarios
-    COMMENT_SINGLE,        // Comentario en una sola línea (//)
-    COMMENT_MULTI,         // Comentario en múltiples líneas (/* */)
-
-    // Otros
-    ERROR                  // Para caracteres no reconocidos
+    public static List<TokenType> getPriorityOrder() {
+        return Arrays.asList(
+                WHITESPACE,
+                COMMENT_MULTI,
+                COMMENT_SINGLE,
+                DATA_TYPE,
+                KEYWORD_CONTROL,
+                KEYWORD_ITERATION,
+                KEYWORD,
+                SEPARATOR,
+                GROUPING,
+                OPERATOR_ARITHMETIC,
+                OPERATOR_ASSIGNMENT,
+                OPERATOR_RELATIONAL,
+                OPERATOR_LOGICAL,
+                INTEGER,
+                DOUBLE,
+                STRING,
+                IDENTIFIER
+                //ERROR
+        );
+    }
 }
 

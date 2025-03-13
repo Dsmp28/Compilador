@@ -19,7 +19,6 @@ public class SymbolTable {
     }
 
     public void printTable() {
-        System.out.println("Tabla de Símbolos:");
         table.forEach((key, value) -> System.out.println("Identificador: " + key + ", Tipo: " + value));
     }
 }

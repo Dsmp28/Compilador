@@ -15,10 +15,14 @@ public class Lexer {
     }
 
     public void analyze(String sourceCode) {
-        String[] lines = sourceCode.split("\n");
+        String[] lines = sourceCode.split(";");
         int lineNumber = 1;
 
         for (String line : lines) {
+            //Pasar a minuscúlas
+            line = line.toLowerCase();
+            line = line.trim();// Opcional: eliminar espacios al inicio y final
+            line += "\n";
             tokenizeLine(line, lineNumber);
             lineNumber++;
         }
@@ -29,18 +33,26 @@ public class Lexer {
         while (column < line.length()) {
             boolean matched = false;
 
-            for (TokenType type : TokenType.values()) {
+            // Verificar espacios en blanco primero
+            Pattern whitespacePattern = RegexPatterns.getPattern(TokenType.WHITESPACE);
+            Matcher whitespaceMatcher = whitespacePattern.matcher(line.substring(column));
+            if (whitespaceMatcher.find() && whitespaceMatcher.start() == 0) {
+                column += whitespaceMatcher.end();
+                continue;
+            }
+
+            // Verificar otros tokens en orden de prioridad
+            for (TokenType type : TokenType.getPriorityOrder()) {
                 Pattern pattern = RegexPatterns.getPattern(type);
                 Matcher matcher = pattern.matcher(line.substring(column));
-
                 if (matcher.find() && matcher.start() == 0) {
                     String lexeme = matcher.group();
-                    tokens.add(new Token(type, lexeme, lineNumber, column + 1));
-
-                    if (type == TokenType.IDENTIFIER) {
-                        symbolTable.addSymbol(lexeme, type);
+                    if (type != TokenType.WHITESPACE) {
+                        tokens.add(new Token(type, lexeme, lineNumber, column + 1));
+                        if (type == TokenType.IDENTIFIER) {
+                            symbolTable.addSymbol(lexeme, type);
+                        }
                     }
-
                     column += lexeme.length();
                     matched = true;
                     break;
