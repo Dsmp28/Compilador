@@ -1,24 +1,39 @@
 package com.springtests.backend.compiler.lexer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SymbolTable {
-    private Map<String, TokenType> table;
+    private List<SymbolTableRow> rows;
 
     public SymbolTable() {
-        table = new HashMap<>();
+        rows = new ArrayList<>();
     }
 
-    public void addSymbol(String identifier, TokenType type) {
-        table.put(identifier, type);
+    public void addSymbol(String identifier, TokenType tokenType, int line, int column) {
+        if (getSymbolRow(identifier) == null) {
+            rows.add(new SymbolTableRow(identifier, tokenType, line, column));
+        }
     }
 
-    public boolean exists(String identifier) {
-        return table.containsKey(identifier);
+    public SymbolTableRow getSymbolRow(String identifier) {
+        for (SymbolTableRow row : rows) {
+            if (row.getIdentifier().equals(identifier)) {
+                return row;
+            }
+        }
+        return null;
     }
 
     public void printTable() {
-        table.forEach((key, value) -> System.out.println("Identificador: " + key + ", Tipo: " + value));
+        for (SymbolTableRow row : rows) {
+            System.out.println(row);
+        }
+    }
+
+    public List<SymbolTableRow> getRows() {
+        return rows;
     }
 }
