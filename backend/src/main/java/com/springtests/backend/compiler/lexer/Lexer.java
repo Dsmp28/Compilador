@@ -101,7 +101,7 @@ public class Lexer {
                     String lexeme = matcher.group(); //Pendiente
                     tokens.add(new Token(type, lexeme, line, col));
                     if (type == TokenType.IDENTIFIER) { // Si tpo es igual a un ID se coloca en la tabla de símbolos
-                        symbolTable.addSymbol(lexeme, type);
+                        symbolTable.addSymbol(lexeme, type, line, col);
                     }
                     // Actualizar pos, línea y columna según el contenido del lexema
                     for (int i = 0; i < lexeme.length(); i++) {
