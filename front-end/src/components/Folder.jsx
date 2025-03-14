@@ -8,8 +8,10 @@ import expandir from "../assets/flecharriba.png";
 import contraer from "../assets/flechabajo.png";
 import { useState } from "react";
 import importar from "../assets/importar.png";
+import { useNavigate } from "react-router-dom";
 
 const Folder = ({ folder }) => {
+    const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleFolder = (folderId) => {
@@ -27,9 +29,22 @@ const Folder = ({ folder }) => {
     const eliminarCarpeta = () => {
         console.log("Eliminar proyecto"); // Lógica para eliminar un proyecto
     };
-    const abrirArchivo = () => {
-        console.log("Abrir archivo"); // Lógica para abrir un archivo
+    const abrirArchivo = (file) => {
+        navigate("/editor",{ state: { fileName : file.name, fileContent: file.content }});
     }
+
+    const files = [ //Acá se deberían de inicializar los archivos de cada carpeta.
+        {
+            id: 1,
+            name: "Archivo 1",
+            content: "Contenido del archivo 1",
+        },
+        {
+            id: 2,
+            name: "Archivo 2",
+            content: "Contenido del archivo 2",
+        }
+    ]
 
     return (
                 <div className="folder-container">
