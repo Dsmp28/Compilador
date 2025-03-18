@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import codigoImagen from "../../assets/codigo.png";
+import {useNavigate} from "react-router-dom";
 
 const StyledHeader = styled.div`
     width: 100%;
@@ -16,10 +17,14 @@ const StyledHeader = styled.div`
     position:relative;
 `;
 
-
 const Header = () => {
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate("/");
+    }
     return (
-        <StyledHeader>
+        <StyledHeader onClick={handleClick} style={{cursor: "pointer"}}>
             <img src={codigoImagen} alt="Codigo" style={{width: "55px", height: "55px"}}/>
             <span style={{marginLeft: "10px"}}>CompileX</span>
         </StyledHeader>
