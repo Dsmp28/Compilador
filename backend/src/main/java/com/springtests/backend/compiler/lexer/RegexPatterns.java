@@ -15,7 +15,7 @@ public class RegexPatterns {
         patterns.put(TokenType.DATA_TYPE, Pattern.compile("^(entero|real|booleano|caracter|cadena)"));
         patterns.put(TokenType.KEYWORD_CONTROL, Pattern.compile("^(if|else|switch)"));
         patterns.put(TokenType.KEYWORD_ITERATION, Pattern.compile("^(for|while|do)"));
-        patterns.put(TokenType.KEYWORD, Pattern.compile("^(escribirlínea|longitud|acadena)"));
+        patterns.put(TokenType.KEYWORD, Pattern.compile("^(escribirlínea|longitud|acadena|escribir)"));
 
         // Identificadores
         patterns.put(TokenType.IDENTIFIER, Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*"));

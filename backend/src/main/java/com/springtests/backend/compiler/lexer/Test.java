@@ -12,6 +12,7 @@ public class Test {
                 if (@contador == 0) {
                     contador = 1;
                 }
+                escribir("El valor del contador es: ", contador);
                 """;
         Lexer lexer = new Lexer(); /*Buenas
         Tardes */ lexer.analyze(code);
