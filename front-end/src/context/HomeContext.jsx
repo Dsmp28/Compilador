@@ -75,7 +75,14 @@ export const HomeProvider = ({ children }) => {
   // Operaciones para carpetas
   const createFolder = async (projectId, folderName) => {
     try {
-      const response = await axiosInstance.post(`/proyectos/${projectId}/carpetas`, { nombre: folderName });
+      const information = {
+        nombre: folderName,
+        proyecto: {
+          id: projectId
+        },
+        archivos: []
+      };
+      const response = await axiosInstance.post(`/carpetas`, information);
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
@@ -85,9 +92,9 @@ export const HomeProvider = ({ children }) => {
     }
   };
 
-  const updateFolder = async (projectId, folderId, folderName) => {
+  const updateFolder = async (folderId, folderName) => {
     try {
-      const response = await axiosInstance.put(`/proyectos/${projectId}/carpetas/${folderId}`, { nombre: folderName });
+      const response = await axiosInstance.put(`/carpetas/${folderId}`, { nombre: folderName });
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
@@ -97,9 +104,9 @@ export const HomeProvider = ({ children }) => {
     }
   };
 
-  const deleteFolder = async (projectId, folderId) => {
+  const deleteFolder = async (folderId) => {
     try {
-      const response = await axiosInstance.delete(`/proyectos/${projectId}/carpetas/${folderId}`);
+      const response = await axiosInstance.delete(`/carpetas/${folderId}`);
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
@@ -110,12 +117,16 @@ export const HomeProvider = ({ children }) => {
   };
 
   // Operaciones para archivos
-  const createFile = async (projectId, folderId, fileName, fileContent = "") => {
+  const createFile = async (folderId, fileName, fileContent) => {
     try {
-      const response = await axiosInstance.post(`/proyectos/${projectId}/carpetas/${folderId}/archivos`, { 
+      const information = {
         nombre: fileName,
-        contenido: fileContent
-      });
+        contenido: fileContent,
+        carpeta: {
+          id: folderId
+        }
+      };
+      const response = await axiosInstance.post(`archivos`, information);
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
