@@ -20,7 +20,7 @@ public class Lexer {
         int col = 1;
         int length = sourceCode.length();
 
-        //Todo a minúscuulas
+        // Convertir todo a minúsculas
         sourceCode = sourceCode.toLowerCase(Locale.ROOT);
 
         while (pos < length) {
@@ -38,7 +38,7 @@ public class Lexer {
                 continue;
             }
 
-            // Detectar comentario de una línea (//)
+            // Comentario de una línea
             if (current == '/' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
                 int commentStartCol = col;
                 int commentStartLine = line;
@@ -53,7 +53,7 @@ public class Lexer {
                 continue;
             }
 
-            // Detectar comentario multilínea (/* ... */)
+            // Comentario multilínea
             if (current == '/' && pos + 1 < length && sourceCode.charAt(pos + 1) == '*') {
                 int commentStartLine = line;
                 int commentStartCol = col;
@@ -63,9 +63,7 @@ public class Lexer {
                 col += 2;
                 boolean closed = false;
 
-                // Recorrer el contenido del comentario
                 while (pos < length) {
-                    // Si se detecta el cierre del comentario
                     if (sourceCode.charAt(pos) == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
                         commentContent.append("*/");
                         pos += 2;
@@ -92,18 +90,22 @@ public class Lexer {
                 continue;
             }
 
-            // Intentar emparejar otros tokens utilizando las expresiones regulares definidas
+            // Intentar emparejar otros tokens
             boolean matched = false;
             for (TokenType type : TokenType.getPriorityOrder()) {
                 Pattern pattern = RegexPatterns.getPattern(type);
                 Matcher matcher = pattern.matcher(sourceCode.substring(pos));
                 if (matcher.find() && matcher.start() == 0) {
-                    String lexeme = matcher.group(); //Pendiente
-                    tokens.add(new Token(type, lexeme, line, col));
-                    if (type == TokenType.IDENTIFIER) { // Si tpo es igual a un ID se coloca en la tabla de símbolos
-                        symbolTable.addSymbol(lexeme, type, line, col);
+                    String lexeme = matcher.group();
+
+                    // Si el token es un IDENTIFIER, almacenamos el índice en la tabla de símbolos
+                    if (type == TokenType.IDENTIFIER) {
+                        int symbolIndex = symbolTable.addSymbol(lexeme, type, line, col);
+                        tokens.add(new Token(type, String.valueOf(symbolIndex), line, col)); // Guardamos el índice
+                    } else {
+                        tokens.add(new Token(type, lexeme, line, col));
                     }
-                    // Actualizar pos, línea y columna según el contenido del lexema
+
                     for (int i = 0; i < lexeme.length(); i++) {
                         char ch = lexeme.charAt(i);
                         if (ch == '\n') {

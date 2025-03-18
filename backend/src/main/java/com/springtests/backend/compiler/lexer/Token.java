@@ -20,7 +20,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return String.format("Token[type=%s, lexeme='%s', line=%d, column=%d]", type, lexeme, line, column);
+        return String.format("<%s, '%s', %d, %d>", type, lexeme, line, column);
     }
 }
 
