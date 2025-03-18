@@ -1,5 +1,7 @@
 package com.springtests.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +17,8 @@ public class Archivo {
     private String nombre;
     private String contenido;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "carpeta_id")
+    @JsonBackReference
     private Carpeta carpeta;
 }
