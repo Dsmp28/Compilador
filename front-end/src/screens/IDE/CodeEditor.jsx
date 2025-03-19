@@ -46,7 +46,7 @@ const CodeEditor = ({ initialContent, fileName, fileId }) => {
 
   // Obtener funciones del contexto para actualizar el archivo y compilar el código
   const { updateFile } = useContext(HomeContext);
-  const { compileCode } = useContext(IdeContext);
+  const { compileCode, handleExport } = useContext(IdeContext);
 
   // Actualiza el estado local si initialContent o fileName cambian
   useEffect(() => {
@@ -95,7 +95,7 @@ const CodeEditor = ({ initialContent, fileName, fileId }) => {
       </EditorWrapper>
       <BottomBarWrapper>
         <BottomBar 
-          onExport={() => console.log("Exportar código")} 
+          onExport={() =>  handleExport(code, currentFileName)}
           onExecute={handleExecute} 
         />
       </BottomBarWrapper>

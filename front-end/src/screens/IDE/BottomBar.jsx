@@ -15,11 +15,10 @@ const BottomBar = ({onExport, onExecute}) => {
     return (
         <StyledBottomBar>
             <div className={"btnExportar"}>
-                <Button
-                    onClick={onExport}
-                    icon={exportar}
-                    className = {"btn-icon"}
-                />
+                <button onClick={onExport} className="btn-icon">
+                    <img src={exportar} alt="Exportar" />
+                </button>
+
                 <span style={{marginLeft: "10px", }}>Exportar</span>
             </div>
             <Button
