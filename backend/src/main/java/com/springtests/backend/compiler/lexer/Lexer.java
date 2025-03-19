@@ -19,8 +19,6 @@ public class Lexer {
         int line = 1;
         int col = 1;
         int length = sourceCode.length();
-
-        // Convertir todo a minúsculas
         sourceCode = sourceCode.toLowerCase(Locale.ROOT);
 
         while (pos < length) {
@@ -64,14 +62,15 @@ public class Lexer {
                 boolean closed = false;
 
                 while (pos < length) {
-                    if (sourceCode.charAt(pos) == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
+                    char c = sourceCode.charAt(pos);
+
+                    if (c == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
                         commentContent.append("*/");
                         pos += 2;
                         col += 2;
                         closed = true;
                         break;
                     } else {
-                        char c = sourceCode.charAt(pos);
                         commentContent.append(c);
                         pos++;
                         if (c == '\n') {
@@ -82,13 +81,20 @@ public class Lexer {
                         }
                     }
                 }
+
                 if (!closed) {
-                    errors.add("Error: Comentario multilínea iniciado en la línea " + commentStartLine + " no se cerró.");
+                    errors.add("Error: Comentario multilínea iniciado en la línea " + commentStartLine
+                            + " columna " + commentStartCol + " no se cerró. Se toma todo el resto del archivo como comentario.");
+                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
+                                         commentStartLine, commentStartCol));
+                    break;
                 } else {
-                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(), commentStartLine, commentStartCol));
+                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
+                                         commentStartLine, commentStartCol));
                 }
                 continue;
             }
+
 
             // Intentar emparejar otros tokens
             boolean matched = false;
@@ -98,10 +104,9 @@ public class Lexer {
                 if (matcher.find() && matcher.start() == 0) {
                     String lexeme = matcher.group();
 
-                    // Si el token es un IDENTIFIER, almacenamos el índice en la tabla de símbolos
                     if (type == TokenType.IDENTIFIER) {
                         int symbolIndex = symbolTable.addSymbol(lexeme, type, line, col);
-                        tokens.add(new Token(type, String.valueOf(symbolIndex), line, col)); // Guardamos el índice
+                        tokens.add(new Token(type, String.valueOf(symbolIndex), line, col));
                     } else {
                         tokens.add(new Token(type, lexeme, line, col));
                     }
