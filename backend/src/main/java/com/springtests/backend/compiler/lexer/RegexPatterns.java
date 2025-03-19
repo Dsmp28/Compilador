@@ -15,7 +15,7 @@ public class RegexPatterns {
         patterns.put(TokenType.DATA_TYPE, Pattern.compile("^(entero|real|booleano|caracter|cadena)"));
         patterns.put(TokenType.KEYWORD_CONTROL, Pattern.compile("^(if|else|switch)"));
         patterns.put(TokenType.KEYWORD_ITERATION, Pattern.compile("^(for|while|do)"));
-        patterns.put(TokenType.KEYWORD, Pattern.compile("^(escribirlínea|longitud|acadena|escribir)"));
+        patterns.put(TokenType.KEYWORD, Pattern.compile("^(escribirlinea|longitud|acadena|escribir)"));
 
         // Identificadores
         patterns.put(TokenType.IDENTIFIER, Pattern.compile("^[a-zA-Z_][a-zA-Z0-9_]*"));
@@ -24,6 +24,10 @@ public class RegexPatterns {
         patterns.put(TokenType.ENTERO, Pattern.compile("^-?\\d+"));
         patterns.put(TokenType.REAL, Pattern.compile("^-?\\d+\\.\\d+"));
         patterns.put(TokenType.CADENA, Pattern.compile("^\"[^\"]*\""));
+
+        //Tipos de datos
+        patterns.put(TokenType.BOOLEANO, Pattern.compile("^(true|false)"));
+        patterns.put(TokenType.CARACTER, Pattern.compile("^'.{1}'"));
 
         // Operadores
         patterns.put(TokenType.OPERATOR_ARITHMETIC, Pattern.compile("^(\\+{1,2}|-{1,2}|\\*|/|\\^|#)"));
@@ -38,9 +42,6 @@ public class RegexPatterns {
         // Comentarios
         patterns.put(TokenType.COMMENT_SINGLE, Pattern.compile("^//.*"));
         patterns.put(TokenType.COMMENT_MULTI, Pattern.compile("^/\\*.*?\\*/", Pattern.DOTALL));
-
-        // Error
-        //patterns.put(TokenType.ERROR, Pattern.compile("^."));
     }
 
     public static Pattern getPattern(TokenType type) {

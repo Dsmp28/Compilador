@@ -15,6 +15,7 @@ public class Lexer {
     }
 
     public void analyze(String sourceCode) {
+        SymbolTableRow.counter = 0;
         int pos = 0;
         int line = 1;
         int col = 1;

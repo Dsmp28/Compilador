@@ -17,11 +17,12 @@ public enum TokenType {
     OPERATOR_LOGICAL,
     ENTERO,
     REAL,
+    BOOLEANO,
+    CARACTER,
     CADENA,
     IDENTIFIER,
     COMMENT_SINGLE,
     COMMENT_MULTI;
-    //ERROR;
 
     public static List<TokenType> getPriorityOrder() {
         return Arrays.asList(
@@ -38,11 +39,12 @@ public enum TokenType {
                 OPERATOR_RELATIONAL,
                 OPERATOR_ASSIGNMENT,
                 OPERATOR_LOGICAL,
-                ENTERO,
                 REAL,
+                ENTERO,
+                BOOLEANO,
+                CARACTER,
                 CADENA,
                 IDENTIFIER
-                //ERROR
         );
     }
 }

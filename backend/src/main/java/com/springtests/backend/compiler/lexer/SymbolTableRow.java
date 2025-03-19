@@ -6,8 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SymbolTableRow {
-    private static int counter = 0; // Contador global para asignar índices
-    private final int index;  // Índice único
+    public static int counter = 0; // Contador global para asignar índices
+    private int index = 0;  // Índice único
     private String identifier;
     private TokenType tokenType;
     private int line;
