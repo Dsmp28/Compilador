@@ -9,10 +9,10 @@ const StyledMainContainer = styled.div`
   height: calc(100vh - 60px);
 `;
 
-const MainContainer = ({fileContent, fileName}) => {
+const MainContainer = ({fileContent, fileName, fileId}) => {
     return (
         <StyledMainContainer>
-            <CodeEditor initialContent={fileContent} fileName={fileName}/>
+            <CodeEditor initialContent={fileContent} fileName={fileName} fileId={fileId}/>
             <OutputConsole />
         </StyledMainContainer>
     );
