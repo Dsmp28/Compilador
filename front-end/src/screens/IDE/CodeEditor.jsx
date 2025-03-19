@@ -4,6 +4,7 @@ import TopBar from "./TopBar.jsx";
 import BottomBar from "./BottomBar.jsx";
 import CodeMirror from "@uiw/react-codemirror";
 import { myLanguageSupport } from "./myLanguage.js";
+import { useEffect } from "react";
 
 const StyledEditorContainer = styled.div`
   display: flex;
@@ -37,9 +38,14 @@ const BottomBarWrapper = styled.div`
   z-index: 10; 
 `;
 
-const CodeEditor = () => {
+const CodeEditor = ({ initialContent, fileName}) => {
     const [theme, setTheme] = useState("dark");
-    const [code, setCode] = useState("// Escribe tu código aquí...");
+    const [code, setCode] = useState("");
+
+    useEffect(() => {
+        setCode(initialContent);
+    }
+    , [initialContent]);
 
     const handleSave = () => console.log("Código guardado:", code); // Aquí se guarda el código
     const handleExport = () => console.log("Código exportado"); // Aquí se exporta el código
@@ -50,7 +56,7 @@ const CodeEditor = () => {
 
     return (
         <StyledEditorContainer>
-            <TopBar onSave={handleSave} onThemeChange={setTheme} />
+            <TopBar onSave={handleSave} onThemeChange={setTheme} fileName={fileName}/>
 
             <EditorWrapper>
                 <CodeEditorWrapper>

@@ -12,10 +12,20 @@ const StyledTopBar = styled.div`
     height:46px;
 `;
 
+const FileTitle = styled.span`
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-right: 20px;
+  color: #333;
+`;
 
-const TopBar = ({onSave}) => {
+
+const TopBar = ({onSave, onThemeChange, fileName}) => {
     return (
         <StyledTopBar>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <FileTitle>{fileName}</FileTitle>
+            </div>
             <Button text="Guardar" onClick={onSave} className="btnBar" />
         </StyledTopBar>
     );

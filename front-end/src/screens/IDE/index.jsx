@@ -17,7 +17,7 @@ const IDE = () => {
     return (
         <StyledIDE>
             <Header />
-            <MainContainer />
+            <MainContainer fileContent={fileContent} fileName={fileName}/>
         </StyledIDE>
     );
 }
