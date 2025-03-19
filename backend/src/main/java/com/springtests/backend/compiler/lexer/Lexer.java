@@ -19,8 +19,6 @@ public class Lexer {
         int line = 1;
         int col = 1;
         int length = sourceCode.length();
-
-        // Convertir todo a minúsculas
         sourceCode = sourceCode.toLowerCase(Locale.ROOT);
 
         while (pos < length) {
@@ -66,7 +64,6 @@ public class Lexer {
                 while (pos < length) {
                     char c = sourceCode.charAt(pos);
 
-                    // Verificar si se cierra el comentario con */
                     if (c == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
                         commentContent.append("*/");
                         pos += 2;
@@ -86,20 +83,15 @@ public class Lexer {
                 }
 
                 if (!closed) {
-                    // No se encontró el cierre, reportar error y tomar todo el resto del archivo como parte del comentario
                     errors.add("Error: Comentario multilínea iniciado en la línea " + commentStartLine
                             + " columna " + commentStartCol + " no se cerró. Se toma todo el resto del archivo como comentario.");
-                    // Añadimos el token de comentario con todo el contenido leído (hasta fin de archivo)
                     tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
                                          commentStartLine, commentStartCol));
-                    // Salimos del while principal, para que no se analice nada más
                     break;
                 } else {
-                    // Comentario cerrado correctamente
                     tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
                                          commentStartLine, commentStartCol));
                 }
-                // Continuar con el siguiente carácter en el bucle while (si se cerró el comentario)
                 continue;
             }
 
@@ -112,7 +104,6 @@ public class Lexer {
                 if (matcher.find() && matcher.start() == 0) {
                     String lexeme = matcher.group();
 
-                    // Si el token es un IDENTIFIER, almacenamos el índice en la tabla de símbolos
                     if (type == TokenType.IDENTIFIER) {
                         int symbolIndex = symbolTable.addSymbol(lexeme, type, line, col);
                         tokens.add(new Token(type, String.valueOf(symbolIndex), line, col));
