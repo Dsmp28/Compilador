@@ -5,7 +5,8 @@ import TopBar from "./TopBar.jsx";
 import BottomBar from "./BottomBar.jsx";
 import CodeMirror from "@uiw/react-codemirror";
 import { myLanguageSupport } from "./myLanguage.js";
-import HomeContext from "../../context/HomeContext.jsx";
+import IdeContext from "../../context/IdeContext";
+import { HomeContext } from "../../context/HomeContext.jsx";
 
 const StyledEditorContainer = styled.div`
   display: flex;
@@ -43,27 +44,38 @@ const CodeEditor = ({ initialContent, fileName, fileId }) => {
   const [code, setCode] = useState("");
   const [currentFileName, setCurrentFileName] = useState(fileName);
 
-  // Obtener updateFile desde el contexto
+  // Obtener funciones del contexto para actualizar el archivo y compilar el código
   const { updateFile } = useContext(HomeContext);
+  const { compileCode } = useContext(IdeContext);
 
-  // Cuando cambie initialContent o fileName, actualizamos el estado local.
+  // Actualiza el estado local si initialContent o fileName cambian
   useEffect(() => {
     setCode(initialContent);
     setCurrentFileName(fileName);
   }, [initialContent, fileName]);
 
-  // Manejar el guardado: actualizar el archivo con el nuevo nombre y contenido
+  // Guardar el archivo actual (actualiza el backend)
   const handleSave = async () => {
     console.log("Guardando código:", code);
     try {
       if (fileId) {
         await updateFile(fileId, currentFileName, code);
-        console.log("Archivo actualizado"); //Agregar mensaje de guardar
+        console.log("Archivo actualizado");
       } else {
         console.warn("No se encontró fileId");
       }
     } catch (error) {
       console.error("Error al guardar archivo:", error);
+    }
+  };
+
+  // Ejecutar el código: envía el código actual al backend para compilarlo
+  const handleExecute = async () => {
+    try {
+      const response = await compileCode(code);
+      console.log("Respuesta del compilador:", response);
+    } catch (error) {
+      console.error("Error al ejecutar código:", error);
     }
   };
 
@@ -82,10 +94,14 @@ const CodeEditor = ({ initialContent, fileName, fileId }) => {
         </CodeEditorWrapper>
       </EditorWrapper>
       <BottomBarWrapper>
-        <BottomBar onExport={() => console.log("Exportar código")} onExecute={() => console.log("Ejecutar código", code)} />
+        <BottomBar 
+          onExport={() => console.log("Exportar código")} 
+          onExecute={handleExecute} 
+        />
       </BottomBarWrapper>
     </StyledEditorContainer>
   );
 };
 
 export default CodeEditor;
+

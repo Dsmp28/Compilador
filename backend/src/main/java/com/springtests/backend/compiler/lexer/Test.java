@@ -14,8 +14,8 @@ public class Test {
                 }
                 escribir("El valor del contador es: ", contador);
                 """;
-        Lexer lexer = new Lexer(); /*Buenas
-        Tardes */ lexer.analyze(code);
+        Lexer lexer = new Lexer(); 
+        lexer.analyze(code);
         lexer.generateOutput();
     }
 }
