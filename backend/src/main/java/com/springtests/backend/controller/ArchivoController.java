@@ -48,16 +48,13 @@ public class ArchivoController {
                 String fileName = exportRequest.getFileName();
                 String content = exportRequest.getContent();
 
-                // Define la carpeta de exportación (puedes cambiar "exports" por la ruta que prefieras)
                 java.nio.file.Path exportDir = java.nio.file.Paths.get("exports");
                 if (!java.nio.file.Files.exists(exportDir)) {
                     java.nio.file.Files.createDirectories(exportDir);
                 }
 
-                // Genera la ruta completa con extensión .txt
                 java.nio.file.Path filePath = exportDir.resolve(fileName + ".txt");
 
-                // Escribe el contenido en el archivo
                 java.nio.file.Files.write(filePath, content.getBytes(java.nio.charset.StandardCharsets.UTF_8));
 
                 return ResponseEntity.ok("Archivo exportado exitosamente en: " + filePath.toAbsolutePath().toString());
