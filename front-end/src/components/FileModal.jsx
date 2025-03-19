@@ -94,7 +94,8 @@ const FileModal = ({ isOpen, onClose, onAddFile }) => {
         const content = event.target.result;
         setFileContent(content);
         // Se asigna el nombre del archivo importado al input de nombre
-        setFileName(file.name);
+        const nameWithoutExtension = file.name.replace(/\.[^/.]+$/, "");
+        setFileName(nameWithoutExtension);
         setImported(true);
       };
       reader.readAsText(file);

@@ -126,7 +126,7 @@ export const HomeProvider = ({ children }) => {
           id: folderId
         }
       };
-      const response = await axiosInstance.post(`archivos`, information);
+      const response = await axiosInstance.post(`/archivos`, information);
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
@@ -136,9 +136,9 @@ export const HomeProvider = ({ children }) => {
     }
   };
 
-  const updateFile = async (projectId, folderId, fileId, fileName, fileContent) => {
+  const updateFile = async (fileId, fileName, fileContent) => {
     try {
-      const response = await axiosInstance.put(`/proyectos/${projectId}/carpetas/${folderId}/archivos/${fileId}`, { 
+      const response = await axiosInstance.put(`/archivos/${fileId}`, { 
         nombre: fileName,
         contenido: fileContent
       });

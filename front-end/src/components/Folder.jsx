@@ -43,7 +43,7 @@ const Folder = ({ folder }) => {
     if (newFolderName.trim()) {
       try {
         // Se asume que el objeto folder tiene la propiedad 'proyecto' con el id del proyecto
-        await updateFolder(folder.proyecto.id, folder.id, newFolderName);
+        await updateFolder(folder.id, newFolderName);
         setIsEditing(false);
         await fetchProjects();
       } catch (error) {
@@ -62,7 +62,7 @@ const Folder = ({ folder }) => {
   const handleDeleteFolder = async () => {
     if (window.confirm("¿Estás seguro de que deseas eliminar esta carpeta?")) {
       try {
-        await deleteFolder(folder.proyecto.id, folder.id);
+        await deleteFolder(folder.id);
         await fetchProjects();
       } catch (error) {
         console.error("Error al eliminar carpeta:", error);
@@ -94,7 +94,7 @@ const Folder = ({ folder }) => {
 
   // Navegar a la vista de edición/visualización de un archivo
   const abrirArchivo = (file) => {
-    navigate("/editor", { state: { fileName: file.name, fileContent: file.content } });
+    navigate("/editor", { state: { fileName: file.name, fileContent: file.content, fileId: file.id } });
   };
 
   return (

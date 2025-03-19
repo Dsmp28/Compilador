@@ -13,11 +13,11 @@ const StyledIDE = styled.div`
 `
 const IDE = () => {
     const location = useLocation();
-    const { fileName, fileContent } = location.state || { fileName: "Sin Nombre", fileContent: "No hay contenido" };
+    const { fileName, fileContent, fileId } = location.state || { fileName: "Sin Nombre", fileContent: "No hay contenido" };
     return (
         <StyledIDE>
             <Header />
-            <MainContainer />
+            <MainContainer fileContent={fileContent} fileName={fileName} fileId={fileId}/>
         </StyledIDE>
     );
 }
