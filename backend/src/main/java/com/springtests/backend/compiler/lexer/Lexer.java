@@ -64,14 +64,16 @@ public class Lexer {
                 boolean closed = false;
 
                 while (pos < length) {
-                    if (sourceCode.charAt(pos) == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
+                    char c = sourceCode.charAt(pos);
+
+                    // Verificar si se cierra el comentario con */
+                    if (c == '*' && pos + 1 < length && sourceCode.charAt(pos + 1) == '/') {
                         commentContent.append("*/");
                         pos += 2;
                         col += 2;
                         closed = true;
                         break;
                     } else {
-                        char c = sourceCode.charAt(pos);
                         commentContent.append(c);
                         pos++;
                         if (c == '\n') {
@@ -82,13 +84,25 @@ public class Lexer {
                         }
                     }
                 }
+
                 if (!closed) {
-                    errors.add("Error: Comentario multilínea iniciado en la línea " + commentStartLine + " no se cerró.");
+                    // No se encontró el cierre, reportar error y tomar todo el resto del archivo como parte del comentario
+                    errors.add("Error: Comentario multilínea iniciado en la línea " + commentStartLine
+                            + " columna " + commentStartCol + " no se cerró. Se toma todo el resto del archivo como comentario.");
+                    // Añadimos el token de comentario con todo el contenido leído (hasta fin de archivo)
+                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
+                                         commentStartLine, commentStartCol));
+                    // Salimos del while principal, para que no se analice nada más
+                    break;
                 } else {
-                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(), commentStartLine, commentStartCol));
+                    // Comentario cerrado correctamente
+                    tokens.add(new Token(TokenType.COMMENT_MULTI, commentContent.toString(),
+                                         commentStartLine, commentStartCol));
                 }
+                // Continuar con el siguiente carácter en el bucle while (si se cerró el comentario)
                 continue;
             }
+
 
             // Intentar emparejar otros tokens
             boolean matched = false;
@@ -101,7 +115,7 @@ public class Lexer {
                     // Si el token es un IDENTIFIER, almacenamos el índice en la tabla de símbolos
                     if (type == TokenType.IDENTIFIER) {
                         int symbolIndex = symbolTable.addSymbol(lexeme, type, line, col);
-                        tokens.add(new Token(type, String.valueOf(symbolIndex), line, col)); // Guardamos el índice
+                        tokens.add(new Token(type, String.valueOf(symbolIndex), line, col));
                     } else {
                         tokens.add(new Token(type, lexeme, line, col));
                     }
