@@ -151,9 +151,9 @@ export const HomeProvider = ({ children }) => {
     }
   };
 
-  const deleteFile = async (projectId, folderId, fileId) => {
+  const deleteFile = async (fileId) => {
     try {
-      const response = await axiosInstance.delete(`/proyectos/${projectId}/carpetas/${folderId}/archivos/${fileId}`);
+      const response = await axiosInstance.delete(`/archivos/${fileId}`);
       fetchProjects(); // Recargar todos los proyectos
       return response.data;
     } catch (err) {
