@@ -1,5 +1,8 @@
 package com.springtests.backend.controller;
 
+import com.springtests.backend.dto.ExportRequestDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import com.springtests.backend.entity.Archivo;
 import com.springtests.backend.service.ArchivoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,4 +42,29 @@ public class ArchivoController {
     public void deleteArchivo(@PathVariable Long id) {
         archivoService.deleteArchivo(id);
     }
+    @PostMapping("/export")
+        public ResponseEntity<String> exportArchivo(@RequestBody ExportRequestDTO exportRequest) {
+            try {
+                String fileName = exportRequest.getFileName();
+                String content = exportRequest.getContent();
+
+                // Define la carpeta de exportación (puedes cambiar "exports" por la ruta que prefieras)
+                java.nio.file.Path exportDir = java.nio.file.Paths.get("exports");
+                if (!java.nio.file.Files.exists(exportDir)) {
+                    java.nio.file.Files.createDirectories(exportDir);
+                }
+
+                // Genera la ruta completa con extensión .txt
+                java.nio.file.Path filePath = exportDir.resolve(fileName + ".txt");
+
+                // Escribe el contenido en el archivo
+                java.nio.file.Files.write(filePath, content.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+
+                return ResponseEntity.ok("Archivo exportado exitosamente en: " + filePath.toAbsolutePath().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("Error al exportar el archivo: " + e.getMessage());
+            }
+        }
 }

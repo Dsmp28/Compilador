@@ -44,6 +44,50 @@ export const IdeProvider = ({ children }) => {
     setCodeResponse(null);
   };
 
+  const handleExport = async (code, fileName) => {
+    const suggestedName = fileName ? fileName + ".txt" : "archivo.txt";
+
+    if (window.showSaveFilePicker) {
+
+      try {
+        const options = {
+          suggestedName,
+          types: [
+            {
+              description: "Archivo de texto",
+              accept: { "text/plain": [".txt"] },
+            },
+          ],
+        };
+
+        const fileHandle = await window.showSaveFilePicker(options);
+
+        const writable = await fileHandle.createWritable();
+        await writable.write(code);
+        await writable.close();
+
+        alert("Archivo guardado exitosamente.");
+      } catch (err) {
+        console.error("Error al guardar archivo:", err);
+        alert("No se pudo guardar el archivo o se canceló la operación.");
+      }
+    } else {
+      const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = suggestedName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      alert("Archivo descargado exitosamente (método fallback).");
+    }
+  };
+
+
+
   // Se memoiza el valor del contexto para evitar re-renderizados innecesarios
   const contextValue = useMemo(() => ({
     codeResponse,
@@ -51,6 +95,7 @@ export const IdeProvider = ({ children }) => {
     error,
     compileCode,
     resetOutput,
+    handleExport,
   }), [codeResponse, loading, error]);
 
   return (
