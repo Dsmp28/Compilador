@@ -14,6 +14,7 @@ const StyledIDE = styled.div`
 const IDE = () => {
     const location = useLocation();
     const { fileName, fileContent, fileId } = location.state || { fileName: "Sin Nombre", fileContent: "No hay contenido" };
+
     return (
         <StyledIDE>
             <Header />

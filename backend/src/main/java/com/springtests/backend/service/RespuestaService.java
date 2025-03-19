@@ -1,42 +1,31 @@
 package com.springtests.backend.service;
 
-import com.springtests.backend.entity.Respuesta;
-import com.springtests.backend.repository.RespuestaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 
-@Service
+import com.springtests.backend.compiler.lexer.Lexer;
+import com.springtests.backend.compiler.lexer.SymbolTable;
+import com.springtests.backend.compiler.lexer.Token;
+
 public class RespuestaService {
+    private Lexer lexer;
 
-    @Autowired
-    private RespuestaRepository respuestaRepository;
-
-    public List<Respuesta> getAllRespuestas() {
-        return respuestaRepository.findAll();
+    public RespuestaService() {
+        lexer = new Lexer();
     }
 
-    public Optional<Respuesta> getRespuestaById(Long id) {
-        return respuestaRepository.findById(id);
+    public void analizarCodigo(String codigo) {
+        lexer.analyze(codigo);
     }
 
-    public Respuesta createRespuesta(Respuesta respuesta) {
-        return respuestaRepository.save(respuesta);
+    public List<Token> obtenerTokens() {
+        return lexer.getTokens();
     }
 
-    public Respuesta updateRespuesta(Long id, Respuesta respuestaDetails) {
-        return respuestaRepository.findById(id)
-                .map(respuesta -> {
-                    respuesta.setMensaje(respuestaDetails.getMensaje());
-                    respuesta.setExito(respuestaDetails.getExito());
-                    return respuestaRepository.save(respuesta);
-                })
-                .orElseThrow(() -> new RuntimeException("Respuesta no encontrada"));
+    public List<String> obtenerErrores() {
+        return lexer.getErrors();
     }
 
-    public void deleteRespuesta(Long id) {
-        respuestaRepository.deleteById(id);
+    public SymbolTable obtenerTablaSimbolos() {
+        return lexer.getSymbolTable();
     }
 }

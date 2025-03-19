@@ -131,4 +131,16 @@ public class Lexer {
     public void generateOutput() {
         LexerOutput.generate(tokens, symbolTable, errors);
     }
+
+    public List<Token> getTokens() {
+        return tokens;
+    }
+
+    public SymbolTable getSymbolTable() {
+        return symbolTable;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
 }
