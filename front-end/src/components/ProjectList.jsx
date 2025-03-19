@@ -1,5 +1,5 @@
 // src/components/ProjectList.jsx
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import Folder from "./Folder";
 import Button from "./Button";
 import proyectoImagen from "../assets/proyecto.png";
@@ -10,6 +10,8 @@ import contraer from "../assets/flechabajo.png";
 import expandir from "../assets/flecharriba.png";
 import HomeContext from "../context/HomeContext";
 import AddFolderModal from "./FolderModal";
+import guardar from "../assets/guardar.png";
+import cancelar from "../assets/cancelar.png";
 
 const ProjectList = ({ projects }) => {
   // Estados para manejo de expansión y edición de proyectos
@@ -97,21 +99,23 @@ const ProjectList = ({ projects }) => {
                         value={newProjectName}
                         onChange={(e) => setNewProjectName(e.target.value)}
                         autoFocus
-                        style={{ marginRight: "8px" }}
+                        style={{ marginRight: "8px",
+                          backgroundColor: "#ffffffde",
+                          color: "#000000",}}
                       />
                       <Button
                         title="Guardar"
                         onClick={() => handleSaveEdit(project.id)}
                         className="btn-small"
+                        icon={guardar}
                       >
-                        Guardar
                       </Button>
                       <Button
                         title="Cancelar"
                         onClick={handleCancelEdit}
+                        icon={cancelar}
                         className="btn-small"
                       >
-                        Cancelar
                       </Button>
                     </div>
                   ) : (

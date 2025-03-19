@@ -69,15 +69,25 @@ const AddFolderModal = ({ isOpen, onClose, onAddFolder }) => {
       <ModalContainer>
         <ModalHeader>Agregar Nueva Carpeta</ModalHeader>
         <Input
-          id="add-folder-input"
-          type="text"
-          placeholder="Nombre de la carpeta"
-          value={folderName}
-          onChange={(e) => setFolderName(e.target.value)}
+            id="add-folder-input"
+            type="text"
+            placeholder="Escribe el nombre de la carpeta..."
+            value={folderName}
+            onChange={(e) => setFolderName(e.target.value)}
+            style={{
+              padding: '12px',
+              borderRadius: '8px',
+              border: '1px solid #ccc',
+              fontSize: '16px',
+              width: '90%',
+              marginBottom: '20px',
+              color: '#000000',
+              backgroundColor: '#f9f9f9'
+            }}
         />
         <ButtonContainer>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleAdd}>Agregar</Button>
+          <Button onClick={onClose} className={"new-project-btn"}>Cancelar</Button>
+          <Button onClick={handleAdd} className={"new-project-btn"}>Agregar</Button>
         </ButtonContainer>
       </ModalContainer>
     </Overlay>
