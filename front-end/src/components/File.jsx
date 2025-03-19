@@ -3,11 +3,16 @@ import {useRef, useState, useEffect} from "react";
 import Button from "./Button.jsx";
 import guardar from "../assets/guardar.png";
 import cancelar from "../assets/cancelar.png";
+import HomeContext from "../context/HomeContext";
+import {useContext} from "react";
+
 const File = ({ file, onClick}) => {
     const [showOptions, setShowOptions] = useState(false);
     const [renaming, setRenaming] = useState(false);
     const [newName, setNewName] = useState(file.name);
     const containerRef = useRef(null);
+    const { updateFile, deleteFile, fetchProjects } = useContext(HomeContext);
+
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -34,19 +39,27 @@ const File = ({ file, onClick}) => {
         setShowOptions(false);
     };
 
-    const confirmRename = () => {
+    const confirmRename = async () => {
         console.log("Nuevo nombre:", newName);
-        // Lógica para renombrar el archivo
-        setRenaming(false);
+        try {
+            // Actualizamos el nombre del archivo
+            await updateFile(file.id, newName, file.content);
+            await fetchProjects(); // Refrescar la vista de proyectos/carpetas
+        } catch (error) {
+            console.error("Error al renombrar el archivo:", error);
+        } finally {
+            setRenaming(false);
+        }
     };
 
-    const handleDelete = (e) => {
+    const handleDelete = async (e) => {
         e.stopPropagation();
         if (window.confirm("¿Estás seguro de que deseas eliminar este archivo?")) {
             try {
-                //Lógica para eliminar un archivo
+                await deleteFile(file.id);
+                await fetchProjects(); // Actualizamos la lista
             } catch (error) {
-                console.error("Error al eliminar archivo:", error);
+                console.error("Error al eliminar el archivo:", error);
             }
         }
         setShowOptions(false);
