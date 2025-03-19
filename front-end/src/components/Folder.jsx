@@ -8,6 +8,8 @@ import editar from "../assets/editar.png";
 import eliminar from "../assets/eliminar.png";
 import expandir from "../assets/flecharriba.png";
 import contraer from "../assets/flechabajo.png";
+import guardar from "../assets/guardar.png";
+import cancelar from "../assets/cancelar.png";
 import File from "./File";
 import FileModal from "./FileModal";
 import { HomeContext } from "../context/HomeContext";
@@ -107,13 +109,13 @@ const Folder = ({ folder }) => {
                 value={newFolderName}
                 onChange={(e) => setNewFolderName(e.target.value)}
                 autoFocus
-                style={{ marginRight: "8px" }}
+                style={{ marginRight: "8px",
+                backgroundColor: "#ffffffde",
+                color: "#000000",}}
               />
-              <Button title="Guardar" onClick={handleSaveFolder} className="btn-small">
-                Guardar
+              <Button title="Guardar" onClick={handleSaveFolder} className="btn-small" icon={guardar}>
               </Button>
-              <Button title="Cancelar" onClick={handleCancelEdit} className="btn-small">
-                Cancelar
+              <Button title="Cancelar" onClick={handleCancelEdit} className="btn-small" icon={cancelar}>
               </Button>
             </div>
           ) : (

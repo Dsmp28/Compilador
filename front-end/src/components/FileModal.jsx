@@ -121,12 +121,32 @@ const FileModal = ({ isOpen, onClose, onAddFile }) => {
           placeholder="Nombre del archivo"
           value={fileName}
           onChange={(e) => setFileName(e.target.value)}
+          style={{
+            padding: '12px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            fontSize: '16px',
+            width: '90%',
+            marginBottom: '20px',
+            color: '#000000',
+            backgroundColor: '#f9f9f9'
+          }}
         />
         <TextArea
           placeholder="Contenido del archivo (opcional)"
           value={fileContent}
           onChange={(e) => setFileContent(e.target.value)}
           rows="5"
+          style={{
+            padding: '12px',
+            borderRadius: '8px',
+            border: '1px solid #ccc',
+            fontSize: '16px',
+            width: '90%',
+            marginBottom: '20px',
+            color: '#000000',
+            backgroundColor: '#f9f9f9'
+          }}
         />
         <DividerContainer>
           <DividerLine />
@@ -140,11 +160,14 @@ const FileModal = ({ isOpen, onClose, onAddFile }) => {
             type="file"
             accept=".txt"
             onChange={handleFileImport}
+            style={{
+              color: '#000000',
+            }}
           />
         </div>
         <ButtonContainer>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleAdd}>Agregar</Button>
+          <Button onClick={onClose} className={"new-project-btn"}>Cancelar</Button>
+          <Button onClick={handleAdd} className={"new-project-btn"}>Agregar</Button>
         </ButtonContainer>
       </ModalContainer>
     </Overlay>
