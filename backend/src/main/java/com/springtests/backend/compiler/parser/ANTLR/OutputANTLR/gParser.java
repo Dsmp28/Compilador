@@ -1,5 +1,5 @@
 // Generated from C:/Users/smora/IdeaProjects/Compilador/backend/src/main/java/com/springtests/backend/compiler/parser/ANTLR/g.g4 by ANTLR 4.13.2
-package com.springtests.backend.compiler.parser.ANTLR;
+package com.springtests.backend.compiler.parser.ANTLR.OutputANTLR;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -91,7 +91,10 @@ public class gParser extends Parser {
 
 	@SuppressWarnings("CheckReturnValue")
 	public static class PruleContext extends ParserRuleContext {
-		public TerminalNode CHAR() { return getToken(gParser.CHAR, 0); }
+		public List<TerminalNode> CHAR() { return getTokens(gParser.CHAR); }
+		public TerminalNode CHAR(int i) {
+			return getToken(gParser.CHAR, i);
+		}
 		public PruleContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -114,13 +117,26 @@ public class gParser extends Parser {
 	public final PruleContext prule() throws RecognitionException {
 		PruleContext _localctx = new PruleContext(_ctx, getState());
 		enterRule(_localctx, 0, RULE_prule);
+		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(2);
 			match(T__0);
-			setState(3);
-			match(CHAR);
+			setState(4); 
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			do {
+				{
+				{
+				setState(3);
+				match(CHAR);
+				}
+				}
+				setState(6); 
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			} while ( _la==CHAR );
 			}
 		}
 		catch (RecognitionException re) {
@@ -135,10 +151,13 @@ public class gParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\u0004\u0001\u0002\u0006\u0002\u0000\u0007\u0000\u0001\u0000\u0001\u0000"+
-		"\u0001\u0000\u0001\u0000\u0000\u0000\u0001\u0000\u0000\u0000\u0004\u0000"+
-		"\u0002\u0001\u0000\u0000\u0000\u0002\u0003\u0005\u0001\u0000\u0000\u0003"+
-		"\u0004\u0005\u0002\u0000\u0000\u0004\u0001\u0001\u0000\u0000\u0000\u0000";
+		"\u0004\u0001\u0002\t\u0002\u0000\u0007\u0000\u0001\u0000\u0001\u0000\u0004"+
+		"\u0000\u0005\b\u0000\u000b\u0000\f\u0000\u0006\u0001\u0000\u0000\u0000"+
+		"\u0001\u0000\u0000\u0000\b\u0000\u0002\u0001\u0000\u0000\u0000\u0002\u0004"+
+		"\u0005\u0001\u0000\u0000\u0003\u0005\u0005\u0002\u0000\u0000\u0004\u0003"+
+		"\u0001\u0000\u0000\u0000\u0005\u0006\u0001\u0000\u0000\u0000\u0006\u0004"+
+		"\u0001\u0000\u0000\u0000\u0006\u0007\u0001\u0000\u0000\u0000\u0007\u0001"+
+		"\u0001\u0000\u0000\u0000\u0001\u0006";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

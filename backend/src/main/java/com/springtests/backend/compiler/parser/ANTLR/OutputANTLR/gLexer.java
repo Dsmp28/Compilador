@@ -1,5 +1,5 @@
 // Generated from C:/Users/smora/IdeaProjects/Compilador/backend/src/main/java/com/springtests/backend/compiler/parser/ANTLR/g.g4 by ANTLR 4.13.2
-package com.springtests.backend.compiler.parser.ANTLR;
+package com.springtests.backend.compiler.parser.ANTLR.OutputANTLR;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
