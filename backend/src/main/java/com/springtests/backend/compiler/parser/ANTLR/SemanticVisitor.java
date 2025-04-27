@@ -11,19 +11,19 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class SemanticVisitor extends gBaseVisitor<Integer> {
+public class SemanticVisitor extends gBaseVisitor<Double> {
     private final SymbolTable table;
-    private final Map<String,Integer> memory = new HashMap<>();
+    private final Map<String,Double> memory = new HashMap<>();
     private final List<String> semanticErrors = new ArrayList<>();
-    private Integer lastValue = null;
+    private Double lastValue = null;
 
     public SemanticVisitor(SymbolTable table) {
         this.table = table;
     }
 
     @Override
-    public Integer visitProg(gParser.ProgContext ctx) {
-        Integer result = null;
+    public Double visitProg(gParser.ProgContext ctx) {
+        Double result = null;
         for (gParser.StatContext stat : ctx.stat()) {
             result = visit(stat);
         }
@@ -32,23 +32,50 @@ public class SemanticVisitor extends gBaseVisitor<Integer> {
     }
 
     @Override
-    public Integer visitAssignStat(gParser.AssignStatContext ctx) {
-        String id  = ctx.IDENT().getText();
-        Integer val = visit(ctx.expr());
-        table.addSymbol(id, TokenType.IDENTIFIER,
-                        ctx.start.getLine(),
-                        ctx.start.getCharPositionInLine());
-        memory.put(id, val);
+    public Double visitAssignStat(gParser.AssignStatContext ctx) {
+        String id = ctx.IDENT().getText();
+        Double val;
+        try {
+            val = visit(ctx.expr());
+            table.addSymbol(id, TokenType.IDENTIFIER,
+                            ctx.start.getLine(),
+                            ctx.start.getCharPositionInLine());
+            memory.put(id, val);
+        } catch (Exception ex) {
+            semanticErrors.add(
+              String.format("Línea %d:%d – Error al evaluar '%s': %s",
+                ctx.start.getLine(),
+                ctx.start.getCharPositionInLine(),
+                id,
+                ex.getMessage())
+            );
+            val = 0.0;
+        }
         return val;
     }
 
     @Override
-    public Integer visitNumberAtom(gParser.NumberAtomContext ctx) {
-        return Integer.parseInt(ctx.NUMBER().getText());
+    public Double visitDiv(gParser.DivContext ctx) {
+        Double left  = visit(ctx.expr(0));
+        Double right = visit(ctx.expr(1));
+        if (right == 0.0) {
+            semanticErrors.add(
+              String.format("Línea %d:%d – División por cero",
+                ctx.start.getLine(),
+                ctx.start.getCharPositionInLine())
+            );
+            return 0.0;
+        }
+        return left / right;
     }
 
     @Override
-    public Integer visitIdentAtom(gParser.IdentAtomContext ctx) {
+    public Double visitNumberAtom(gParser.NumberAtomContext ctx) {
+        return Double.parseDouble(ctx.NUMBER().getText());
+    }
+
+    @Override
+    public Double visitIdentAtom(gParser.IdentAtomContext ctx) {
         String id = ctx.IDENT().getText();
         if (!memory.containsKey(id)) {
             semanticErrors.add(String.format(
@@ -56,54 +83,51 @@ public class SemanticVisitor extends gBaseVisitor<Integer> {
                 ctx.start.getLine(),
                 ctx.start.getCharPositionInLine(),
                 id));
-            return 0;  // valor por defecto para seguir analizando
+            return 0.0;  // valor por defecto para seguir analizando
         }
         return memory.get(id);
     }
 
     @Override
-    public Integer visitBracketExpr(gParser.BracketExprContext ctx) {
+    public Double visitBracketExpr(gParser.BracketExprContext ctx) {
         return visit(ctx.expr());
     }
 
     @Override
-    public Integer visitAdd(gParser.AddContext ctx) {
+    public Double visitAdd(gParser.AddContext ctx) {
         return visit(ctx.expr(0)) + visit(ctx.expr(1));
     }
 
     @Override
-    public Integer visitSub(gParser.SubContext ctx) {
+    public Double visitSub(gParser.SubContext ctx) {
         return visit(ctx.expr(0)) - visit(ctx.expr(1));
     }
 
     @Override
-    public Integer visitMul(gParser.MulContext ctx) {
+    public Double visitMul(gParser.MulContext ctx) {
         return visit(ctx.expr(0)) * visit(ctx.expr(1));
     }
 
     @Override
-    public Integer visitDiv(gParser.DivContext ctx) {
-        return visit(ctx.expr(0)) / visit(ctx.expr(1));
+    public Double visitPower(gParser.PowerContext ctx) {
+        Double base = visit(ctx.expr(0));
+        Double exp  = visit(ctx.expr(1));
+        return Math.pow(base, exp);
     }
 
-    @Override
-    public Integer visitPower(gParser.PowerContext ctx) {
-        int base = visit(ctx.expr(0));
-        int exp  = visit(ctx.expr(1));
-        return (int) Math.pow(base, exp);
+    public void addSemanticError(String error) {
+        semanticErrors.add(error);
     }
 
-    /**
-     * Devuelve la lista de errores semánticos acumulados.
-     */
     public List<String> getSemanticErrors() {
         return semanticErrors;
     }
 
-    /**
-     * Devuelve el valor resultante de la última expresión visitada.
-     */
-    public Integer getLastValue() {
+    public Double getLastValue() {
         return lastValue;
+    }
+
+    public Map<String, Double> getMemory() {
+        return memory;
     }
 }
