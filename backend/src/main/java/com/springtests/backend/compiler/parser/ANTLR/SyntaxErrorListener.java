@@ -12,7 +12,10 @@ public class SyntaxErrorListener extends BaseErrorListener{
                             int line, int charPosInLine,
                             String msg,
                             RecognitionException e) {
-        errors.add(String.format("Linea %d:%d – %s", line, charPosInLine, msg));
+        // Sustituye <EOF> por $ en el texto del mensaje
+        String visualMsg = msg.replace("<EOF>", "$");
+        errors.add(String.format("Linea %d:%d – %s",
+                                 line, charPosInLine, visualMsg));
     }
 
     public List<String> getErrors() {
