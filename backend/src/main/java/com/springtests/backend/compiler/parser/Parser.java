@@ -37,7 +37,6 @@ public class Parser {
 
         // 5) Evaluación semántica
         SemanticVisitor semVisitor = new SemanticVisitor(symbolTable);
-        //    iteramos sobre cada statement para atrapar excepciones sueltas
         for (gParser.StatContext stat : ((gParser.ProgContext)tree).stat()) {
           try {
             semVisitor.visit(stat);
