@@ -47,13 +47,16 @@ public class AlgebraicEvaluator {
 
     public static void main(String[] args) throws IOException {
         // Ejemplo 1
+        System.out.println("Ejemplo 1:");
         String code1 = ""
           + "Var01 <- 10;\n"
-          + "Resultado <- Var01^[10-3*[5-4/2]];\n";
+          + "Resultado <- Var01 + 5;\n"
+          + "X <- [1<-+2];\n";
         evaluate(code1);
 
         // Ejemplo 2
-        String code2 = "A <- 30;\n B <- A + 50;";
+        System.out.println("\nEjemplo 2:");
+        String code2 = "A <- 30;\n B <- A +++ 50;";
         evaluate(code2);
     }
 
