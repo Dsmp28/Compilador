@@ -1,38 +1,72 @@
 package com.springtests.backend.compiler.parser;
 
+
+import com.springtests.backend.compiler.lexer.Lexer;
+import com.springtests.backend.compiler.lexer.SymbolTable;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gLexer;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gParser;
-import com.springtests.backend.compiler.parser.ANTLR.Visitor;
+import com.springtests.backend.compiler.parser.ANTLR.SyntaxErrorListener;
+import com.springtests.backend.compiler.parser.ANTLR.SemanticVisitor;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import java.util.*;
 
-import java.io.IOException;
 
 public class Parser {
-    private gLexer lexer;
-    private gParser parser;
-    private Visitor visitor;
-    private ParseTree tree;
+    private final SymbolTable symbolTable = new SymbolTable();
 
-    public void analyze(String SourceCode) throws IOException {
-        CharStream input =  CharStreams.fromString(SourceCode);
-        lexer = new gLexer(input);
+    public AnalysisResult analyze(String code) {
+        // 1) Cada vez creamos una tabla limpia
+        SymbolTable symbolTable = new SymbolTable();
+
+        // 2) Lex + Parse con ANTLR
+        CharStream cs = CharStreams.fromString(code);
+        gLexer lexer = new gLexer(cs);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        parser = new gParser(tokens);
-        tree = parse();
+        gParser parser = new gParser(tokens);
 
-        visitor = new Visitor();
-        visit(tree);
+        // 3) Captura errores de sintaxis
+        SyntaxErrorListener syntaxErrors = new SyntaxErrorListener();
+        parser.removeErrorListeners();
+        parser.addErrorListener(syntaxErrors);
+
+        // 4) Árbol de análisis
+        ParseTree tree = parser.prog();
+
+        // 5) Evaluación semántica
+        SemanticVisitor semVisitor = new SemanticVisitor(symbolTable);
+        for (gParser.StatContext stat : ((gParser.ProgContext)tree).stat()) {
+          try {
+            semVisitor.visit(stat);
+          } catch (Exception ex) {
+            semVisitor.addSemanticError(
+              String.format("Línea %d:%d – Excepción al evaluar: %s",
+                stat.start.getLine(),
+                stat.start.getCharPositionInLine(),
+                ex.getMessage())
+            );
+          }
+        }
+
+        // 6) Acumular errores
+        List<String> errors = new ArrayList<>();
+        errors.addAll(syntaxErrors.getErrors());
+        errors.addAll(semVisitor.getSemanticErrors());
+
+        // 7) Resultado final y memoria
+        Double finalValue = semVisitor.getLastValue();
+        Map<String, Double> memory   = semVisitor.getMemory();
+
+        return new AnalysisResult(finalValue, symbolTable, errors, memory);
     }
 
-    public ParseTree parse() {
-        return parser.prule();
-    }
 
-    public void visit(ParseTree tree) {
-        visitor.visit(tree);
-    }
+    public record AnalysisResult(
+        Double value,
+        SymbolTable table,
+        List<String> errors,
+        Map<String, Double> memory
+    ) {}
 }
