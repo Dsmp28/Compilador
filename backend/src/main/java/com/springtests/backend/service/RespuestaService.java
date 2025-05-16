@@ -1,31 +1,38 @@
 package com.springtests.backend.service;
 
-import java.util.List;
-
-import com.springtests.backend.compiler.lexer.Lexer;
-import com.springtests.backend.compiler.lexer.SymbolTable;
-import com.springtests.backend.compiler.lexer.Token;
+import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gParser;
+import com.springtests.backend.compiler.parser.Parser;
+import com.springtests.backend.dto.CodeResponseDTO;
+import com.springtests.backend.dto.ParseTreeNodeDTO;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Trees;
 
 public class RespuestaService {
-    private Lexer lexer;
+    private Parser parser;
 
     public RespuestaService() {
-        lexer = new Lexer();
+        parser = new Parser();
     }
 
-    public void analizarCodigo(String codigo) {
-        lexer.analyze(codigo);
+    public CodeResponseDTO analizarCodigo(String codigo) {
+        Parser.AnalysisResult result = parser.analyze(codigo);
+        CodeResponseDTO codeResponseDTO = new CodeResponseDTO();
+
+        codeResponseDTO.setErrors(result.errors());
+        codeResponseDTO.setMemory(result.memory());
+        codeResponseDTO.setTree(toParseTreeDto(result.tree(), result.parser()));
+
+        return codeResponseDTO;
     }
 
-    public List<Token> obtenerTokens() {
-        return lexer.getTokens();
-    }
+    private ParseTreeNodeDTO toParseTreeDto(ParseTree tree, gParser parser) {
+        String nodeText = Trees.getNodeText(tree, parser);
+        ParseTreeNodeDTO node = new ParseTreeNodeDTO(nodeText);
 
-    public List<String> obtenerErrores() {
-        return lexer.getErrors();
-    }
+        for (int i = 0; i < tree.getChildCount(); i++) {
+            node.getChildren().add(toParseTreeDto(tree.getChild(i), parser));
+        }
 
-    public SymbolTable obtenerTablaSimbolos() {
-        return lexer.getSymbolTable();
+        return node;
     }
 }
