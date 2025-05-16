@@ -1,7 +1,7 @@
 package com.springtests.backend.compiler.parser;
 
 
-import com.springtests.backend.compiler.lexer.Lexer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springtests.backend.compiler.lexer.SymbolTable;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gLexer;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gParser;
@@ -11,6 +11,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Trees;
+
 import java.util.*;
 
 
@@ -59,7 +61,7 @@ public class Parser {
         Double finalValue = semVisitor.getLastValue();
         Map<String, Double> memory   = semVisitor.getMemory();
 
-        return new AnalysisResult(finalValue, symbolTable, errors, memory);
+        return new AnalysisResult(finalValue, symbolTable, errors, memory, tree, parser);
     }
 
 
@@ -67,6 +69,8 @@ public class Parser {
         Double value,
         SymbolTable table,
         List<String> errors,
-        Map<String, Double> memory
+        Map<String, Double> memory,
+        ParseTree tree,
+        gParser parser
     ) {}
 }
