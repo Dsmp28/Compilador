@@ -1,7 +1,7 @@
 package com.springtests.backend.compiler.parser;
 
 
-import com.springtests.backend.compiler.lexer.Lexer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springtests.backend.compiler.lexer.SymbolTable;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gLexer;
 import com.springtests.backend.compiler.parser.ANTLR.OutputANTLR.gParser;
@@ -11,6 +11,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.Trees;
+
 import java.util.*;
 
 
@@ -55,11 +57,21 @@ public class Parser {
         errors.addAll(syntaxErrors.getErrors());
         errors.addAll(semVisitor.getSemanticErrors());
 
+        // Árbol en formato JSON
+        String parseTreeJson = "";
+        try {
+            Map<String, Object> treeJson = toJsonNode(tree, parser);
+            ObjectMapper mapper = new ObjectMapper();
+            parseTreeJson = mapper.writeValueAsString(treeJson);
+        } catch (Exception e) {
+            errors.add("Error al generar árbol JSON: " + e.getMessage());
+        }
+
         // 7) Resultado final y memoria
         Double finalValue = semVisitor.getLastValue();
         Map<String, Double> memory   = semVisitor.getMemory();
 
-        return new AnalysisResult(finalValue, symbolTable, errors, memory);
+        return new AnalysisResult(finalValue, symbolTable, errors, memory, parseTreeJson);
     }
 
 
@@ -67,6 +79,23 @@ public class Parser {
         Double value,
         SymbolTable table,
         List<String> errors,
-        Map<String, Double> memory
+        Map<String, Double> memory,
+        String parseTreeJson
     ) {}
+
+    private Map<String, Object> toJsonNode(ParseTree tree, gParser parser) {
+        Map<String, Object> node = new HashMap<>();
+        String nodeText = Trees.getNodeText(tree, parser);
+        node.put("name", nodeText);
+
+        if (tree.getChildCount() > 0) {
+            List<Map<String, Object>> children = new ArrayList<>();
+            for (int i = 0; i < tree.getChildCount(); i++) {
+                children.add(toJsonNode(tree.getChild(i), parser));
+            }
+            node.put("children", children);
+        }
+
+        return node;
+    }
 }

@@ -6,8 +6,7 @@ public class Test {
     public static void main(String[] args) throws IOException {
         String code = ""
           + "Var01 <- 10;\n"
-          + "Resultado <- Var01 + 5;\n"
-          + "X <- [1<-+2];\n";
+          + "Resultado <- Var01 + 5;\n";
 
         Parser.AnalysisResult result = new Parser().analyze(code);
 
