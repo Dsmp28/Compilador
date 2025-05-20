@@ -1,5 +1,7 @@
 package com.springtests.backend.compiler.parser;
 
+import com.springtests.backend.compiler.parser.Quadruple;
+import com.springtests.backend.compiler.parser.PythonCodeGenerator;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Locale;
@@ -42,6 +44,40 @@ public class AlgebraicEvaluator {
                               "Resultado final: %.6f%n",
                               result.value());
         }
+        List<Quadruple> intermediateCode = result.intermediateCode();
+
+        List<Quadruple> validCode = intermediateCode.stream()
+                .filter(AlgebraicEvaluator::isValidQuadruple)
+                .toList();
+
+        if (!validCode.isEmpty()) {
+            System.out.println("\nCódigo intermedio (cuádruplas):");
+            for (Quadruple q : validCode) {
+                System.out.println(q);
+            }
+
+            System.out.println("\nCódigo Python generado:");
+            String pythonCode = PythonCodeGenerator.generatePythonCode(validCode);
+            System.out.println(pythonCode);
+        }
+    }
+
+    private static boolean isValidQuadruple(Quadruple q) {
+        return isSafe(q.arg1) && isSafe(q.result) &&
+                (q.op.equals("=") || isSafe(q.arg2));
+    }
+
+    private static boolean isSafe(String s) {
+        if (s == null || s.isBlank()) return false;
+
+        String[] illegalPatterns = {"[", "]", "<-", "++", "+-", "--"};
+        for (String pattern : illegalPatterns) {
+            if (s.contains(pattern)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

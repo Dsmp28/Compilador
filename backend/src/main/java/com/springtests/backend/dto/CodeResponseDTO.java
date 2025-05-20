@@ -6,6 +6,7 @@ import java.util.Map;
 import com.springtests.backend.compiler.lexer.SymbolTable;
 import com.springtests.backend.compiler.lexer.Token;
 
+import com.springtests.backend.compiler.parser.Quadruple;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,6 @@ public class CodeResponseDTO {
     private List<String> errors;
     private Map<String, Double> memory;
     private ParseTreeNodeDTO tree;
+    private List<Quadruple> intermediateCode;
 }
+

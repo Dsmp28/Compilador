@@ -60,8 +60,11 @@ public class Parser {
         // 7) Resultado final y memoria
         Double finalValue = semVisitor.getLastValue();
         Map<String, Double> memory   = semVisitor.getMemory();
+        List<Quadruple> intermediateCode = semVisitor.getIntermediateCode();
 
-        return new AnalysisResult(finalValue, symbolTable, errors, memory, tree, parser);
+
+        return new AnalysisResult(finalValue, symbolTable, errors, memory, tree, parser, intermediateCode);
+
     }
 
 
@@ -71,6 +74,25 @@ public class Parser {
         List<String> errors,
         Map<String, Double> memory,
         ParseTree tree,
-        gParser parser
+        gParser parser,
+        List<Quadruple> intermediateCode
     ) {}
+    public String analyzeToJson(String code) {
+        AnalysisResult result = analyze(code);
+
+        QuadrupleResult quadrupleResult = new QuadrupleResult(
+                result.errors(),
+                result.memory(),
+                result.value(),
+                result.intermediateCode()
+        );
+
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(quadrupleResult);
+        } catch (Exception e) {
+            return "{\"error\": \"No se pudo convertir a JSON: " + e.getMessage() + "\"}";
+        }
+    }
+
 }

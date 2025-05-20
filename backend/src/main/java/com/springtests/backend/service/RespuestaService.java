@@ -21,6 +21,7 @@ public class RespuestaService {
         codeResponseDTO.setErrors(result.errors());
         codeResponseDTO.setMemory(result.memory());
         codeResponseDTO.setTree(toParseTreeDto(result.tree(), result.parser()));
+        codeResponseDTO.setIntermediateCode(result.intermediateCode());
 
         return codeResponseDTO;
     }
