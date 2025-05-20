@@ -22,5 +22,7 @@ public class CodeResponseDTO {
     private Map<String, Double> memory;
     private ParseTreeNodeDTO tree;
     private List<Quadruple> intermediateCode;
+    private List<String> formattedQuadruples;
+    private List<String> pythonCode;
 }
 
