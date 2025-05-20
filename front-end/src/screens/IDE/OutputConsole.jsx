@@ -3,6 +3,7 @@ import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import imagenFlecha from "../../assets/flechabajo.png";
 import IdeContext from "../../context/IdeContext";
+import TreeVisualizer from "../../components/treeVisualizer.jsx";
 
 const StyledConsole = styled.div`
   width: 40%;
@@ -55,23 +56,26 @@ const TableCell = styled.td`
   padding: 4px 8px;
 `;
 
+const generatePythonTutorURL = (codeLines) => {
+  const joinedCode = codeLines.join("\n");
+  const encoded = encodeURIComponent(joinedCode);
+  return `https://pythontutor.com/visualize.html#code=${encoded}&cumulative=false&heapPrimitives=false&textReferences=false&py=3&curInstr=0`;
+};
+
 const OutputConsole = () => {
   // Obtén la respuesta del compilador desde IdeContext
   const { codeResponse } = useContext(IdeContext);
-
-  // Extraer tokens, errores y símbolos desde codeResponse
-  const tokens = codeResponse?.tokens || [];
+  // Extraer valores en memoria, errores y el arbol
+  const memory = codeResponse?.memory || [];
   const errors = codeResponse?.errors || [];
-  // Suponemos que la tabla de símbolos se encuentra en symbolTable.rows
-  const symbols =
-    codeResponse?.symbolTable && codeResponse.symbolTable.rows
-      ? codeResponse.symbolTable.rows
-      : [];
+  const tree = codeResponse?.tree || [];
+  const pythonCode = codeResponse?.pythonCode || [];
 
   const [sections, setSections] = useState({
-    tokens: false,
+    memory: false,
     errors: false,
-    simbolos: false,
+    tree: false,
+    intermediate: false
   });
 
   const toggleSection = (section) => {
@@ -84,39 +88,35 @@ const OutputConsole = () => {
   return (
     <StyledConsole>
       <div className="tituloSalida">
-        <p className="textoSalida">Salida:</p>
+        <p className="textoSalida">Salida</p>
       </div>
 
-      {/* Sección de Tokens */}
+      {/* Sección de Memory */}
       <Section>
-        <SectionHeader onClick={() => toggleSection("tokens")}>
-          Lista de Tokens
-          <ArrowIcon src={imagenFlecha} alt="Icono" rotated={sections.tokens} />
+        <SectionHeader onClick={() => toggleSection("memory")}>
+          Valores en memoria
+          <ArrowIcon src={imagenFlecha} alt="Icono" rotated={sections.memory} />
         </SectionHeader>
-        <SectionContent expanded={sections.tokens}>
-          {tokens.length > 0 ? (
+        <SectionContent expanded={sections.memory}>
+          {Object.keys(memory).length > 0 ? (
             <Table>
               <thead>
                 <tr>
-                  <TableHeader>Lexema</TableHeader>
-                  <TableHeader>Tipo</TableHeader>
-                  <TableHeader>Línea</TableHeader>
-                  <TableHeader>Columna</TableHeader>
+                  <TableHeader>Variable</TableHeader>
+                  <TableHeader>Valor</TableHeader>
                 </tr>
               </thead>
               <tbody>
-                {tokens.map((token, index) => (
+                {Object.entries(memory).map(([key, value], index) => (
                   <tr key={index}>
-                    <TableCell>{token.lexeme}</TableCell>
-                    <TableCell>{token.type}</TableCell>
-                    <TableCell>{token.line || "-"}</TableCell>
-                    <TableCell>{token.column || "-"}</TableCell>
+                    <TableCell>{key}</TableCell>
+                    <TableCell>{value}</TableCell>
                   </tr>
                 ))}
               </tbody>
             </Table>
           ) : (
-            <p>No hay tokens</p>
+            <p>No hay valores en memoria.</p>
           )}
         </SectionContent>
       </Section>
@@ -135,39 +135,39 @@ const OutputConsole = () => {
           )}
         </SectionContent>
       </Section>
-
-      {/* Sección de Tabla de Símbolos */}
+      {tree && (
+          <Section>
+            <SectionHeader onClick={() => toggleSection("tree")}>
+              Árbol de Sintaxis
+              <ArrowIcon src={imagenFlecha} alt="Icono" rotated={sections.tree} />
+            </SectionHeader>
+            <SectionContent expanded={sections.tree}>
+              <TreeVisualizer data={tree} />
+            </SectionContent>
+          </Section>
+      )}
+      {/* Sección de codigo intermedio */}
       <Section>
-        <SectionHeader onClick={() => toggleSection("simbolos")}>
-          Tabla de Símbolos
-          <ArrowIcon src={imagenFlecha} alt="Icono" rotated={sections.simbolos} />
+        <SectionHeader onClick={() => toggleSection("intermediate")}>
+          Codigo intermedio
+          <ArrowIcon src={imagenFlecha} alt="Icono" rotated={sections.intermediate} />
         </SectionHeader>
-        <SectionContent expanded={sections.simbolos}>
-          {symbols.length > 0 ? (
-            <Table>
-              <thead>
-                <tr>
-                  <TableHeader>Index</TableHeader>  
-                  <TableHeader>Identificador</TableHeader>
-                  <TableHeader>Tipo</TableHeader>
-                  <TableHeader>Linea</TableHeader>
-                  <TableHeader>Columna</TableHeader>
-                </tr>
-              </thead>
-              <tbody>
-                {symbols.map((symbol, index) => (
-                  <tr key={index}>
-                    <TableCell>{index}</TableCell>
-                    <TableCell>{symbol.identifier || symbol.nombre}</TableCell>
-                    <TableCell>{symbol.tokenType || symbol.tipo}</TableCell>
-                    <TableCell>{symbol.line || "-"}</TableCell>
-                    <TableCell>{symbol.column || "-"}</TableCell>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+        <SectionContent expanded={sections.intermediate}>
+          {pythonCode.length > 0 ? (
+              <>
+                <pre>
+                  {pythonCode.map((linea, index) => (
+                      <div key={index}>{linea}</div>
+                  ))}
+                </pre>
+                <button
+                    onClick={() => window.open(generatePythonTutorURL(pythonCode), "_blank")}
+                >
+                  Ejecutar en Python Tutor
+                </button>
+              </>
           ) : (
-            <p>No hay símbolos</p>
+              <p>No hay código intermedio.</p>
           )}
         </SectionContent>
       </Section>
