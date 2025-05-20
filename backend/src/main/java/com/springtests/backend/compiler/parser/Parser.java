@@ -40,16 +40,18 @@ public class Parser {
         // 5) Evaluación semántica
         SemanticVisitor semVisitor = new SemanticVisitor(symbolTable);
         for (gParser.StatContext stat : ((gParser.ProgContext)tree).stat()) {
-          try {
-            semVisitor.visit(stat);
-          } catch (Exception ex) {
-            semVisitor.addSemanticError(
-              String.format("Línea %d:%d – Excepción al evaluar: %s",
-                stat.start.getLine(),
-                stat.start.getCharPositionInLine(),
-                ex.getMessage())
-            );
-          }
+            if (!syntaxErrors.getErrors().isEmpty()) break;
+
+            try {
+                semVisitor.visit(stat);
+            } catch (Exception ex) {
+                semVisitor.addSemanticError(
+                        String.format("Línea %d:%d – Excepción al evaluar: %s",
+                                stat.start.getLine(),
+                                stat.start.getCharPositionInLine(),
+                                ex.getMessage())
+                );
+            }
         }
 
         // 6) Acumular errores

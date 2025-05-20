@@ -22,36 +22,35 @@ public class RespuestaService {
         Parser.AnalysisResult result = parser.analyze(codigo);
         CodeResponseDTO codeResponseDTO = new CodeResponseDTO();
 
-        codeResponseDTO.setErrors(result.errors());
+        List<String> errors = result.errors();
+        codeResponseDTO.setErrors(errors);
         codeResponseDTO.setMemory(result.memory());
         codeResponseDTO.setTree(toParseTreeDto(result.tree(), result.parser()));
         codeResponseDTO.setIntermediateCode(result.intermediateCode());
 
-        List<String> formatted = new ArrayList<>();
-        List<String> python = new ArrayList<>();
+        if (errors.isEmpty()) {
+            List<String> formatted = new ArrayList<>();
+            List<String> python = new ArrayList<>();
 
-        for (Quadruple q : result.intermediateCode()) {
-            String arg1 = safe(q.getArg1());
-            String arg2 = safe(q.getArg2());
+            for (Quadruple q : result.intermediateCode()) {
+                formatted.add(String.format("(%s, %s, %s, %s)",
+                        safe(q.getOp()), safe(q.getArg1()), safe(q.getArg2()), safe(q.getResult())));
 
-            if (arg1.contains("[") || arg1.contains("<") || arg1.contains("=>") ||
-                    arg2.contains("[") || arg2.contains("<") || arg2.contains("=>")) {
-                break;
+                if (q.getArg2() == null || q.getArg2().isBlank()) {
+                    python.add(q.getResult() + " = " + q.getArg1());
+                } else {
+                    String op = q.getOp().equals("^") ? "**" : q.getOp();
+                    python.add(q.getResult() + " = " + q.getArg1() + " " + op + " " + q.getArg2());
+                }
             }
 
-            formatted.add(String.format("(%s, %s, %s, %s)",
-                    safe(q.getOp()), arg1, arg2, safe(q.getResult())));
+            codeResponseDTO.setFormattedQuadruples(formatted);
+            codeResponseDTO.setPythonCode(python);
+        } else {
 
-            if (q.getArg2() == null || q.getArg2().isBlank()) {
-                python.add(q.getResult() + " = " + q.getArg1());
-            } else {
-                String op = q.getOp().equals("^") ? "**" : q.getOp();
-                python.add(q.getResult() + " = " + q.getArg1() + " " + op + " " + q.getArg2());
-            }
+            codeResponseDTO.setFormattedQuadruples(List.of());
+            codeResponseDTO.setPythonCode(List.of());
         }
-
-        codeResponseDTO.setFormattedQuadruples(formatted);
-        codeResponseDTO.setPythonCode(python);
         return codeResponseDTO;
     }
 
